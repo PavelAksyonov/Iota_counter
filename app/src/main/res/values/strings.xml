@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">iota counter</string>
+    <string name="new_games">NEW GAME</string>
+    <string name="scores">SCORES</string>
+    <string name="quantity_players">Quantity players</string>
+    <string name="title_activity_new_game">Activity_new_game</string>
+    <string name="total_scores">Total scores:</string>
+    <string name="best_result">Best result:</string>
+    <string name="settings">Settings</string>
+    <string name="settings_menu">iota counter</string>
+
+</resources>

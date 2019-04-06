@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#d20407</color>
+    <color name="colorPrimaryDark">#09cf0c</color>
+    <color name="colorAccent">#f5ecef</color>
+    <color name="main_color">#d90517</color>
+    <color name="color_scores">#0409b1</color>
+    <color name="color_scores2">#fff30d</color>
+    <color name="blue">#2954e1</color>
+    <color name="red_game_end">#D20407</color>
+    <color name="orange">#f4741e</color>
+
+
+</resources>
