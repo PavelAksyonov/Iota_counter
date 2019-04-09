@@ -8,5 +8,6 @@
     <string name="best_result">Best result:</string>
     <string name="settings">Settings</string>
     <string name="settings_menu">iota counter</string>
+    <string name="developer">Developed by Pavel Aksyonov (2019)</string>
 
 </resources>
