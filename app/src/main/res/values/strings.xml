@@ -9,5 +9,6 @@
     <string name="settings">Settings</string>
     <string name="settings_menu">iota counter</string>
     <string name="developer">Developed by Pavel Aksyonov (2019)</string>
+    <string name="Enter_result_for_player">Enter result for: Player</string>
 
 </resources>

@@ -63,6 +63,11 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
 
         String str = next_value.getText().toString();
         String str2 = new String("");
+
+       // if (str.length() ==0){        }
+        if (next_value.getText().length()==0){
+            next_value.setError("Please enter result");
+        }
         if (str.equals(str2)) {
             return 0;
         } else
@@ -92,12 +97,6 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
         tx_prev_result_user2 = (TextView) findViewById(R.id.tx_prev_result_user2);
         tx_prev_result_user3 = (TextView) findViewById(R.id.tx_prev_result_user3);
         tx_prev_result_user4 = (TextView) findViewById(R.id.tx_prev_result_user4);
-
-
-
-
-
-
 
         next_value = (EditText) findViewById(R.id.ed_tx_next_value);
         bt_ok = (Button) findViewById(R.id.bt_ok);
@@ -173,8 +172,8 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
 
 
             case R.id.bt_ok:
-                set_result();
-                next_user();
+                check_edit_result();
+
                 break;
 
             case R.id.bt_skip:
@@ -186,8 +185,27 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
         }
     }
 
+    private void check_edit_result() {
 
+    int is_error =0;
 
+     if (next_value.getText().length()==0){
+            next_value.setError("Please enter result");
+            is_error =1;
+            return ;
+        }
+
+     if (Integer.parseInt((next_value.getText().toString())) >1000){
+            next_value.setError("Please enter correct result");
+            is_error =1;
+        }
+     if (is_error !=1)  {
+
+        set_result();
+        next_user();
+
+    }
+    }
 
 
     private void next_user() {
@@ -238,7 +256,7 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
 
         if (c == 1) {
 
-            Player_1.getUser_score(getResult());
+            Player_1.setUser_score(getResult());
             Player_1.setPrevious_result(getResult());
             Player_1.insert_data(getResult());
             Player_1.setBest_result(getResult());
@@ -249,7 +267,7 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
         } else if (c == 2) {
 
 
-            Player_2.getUser_score(getResult());
+            Player_2.setUser_score(getResult());
             Player_2.setPrevious_result(getResult());
             Player_2.insert_data(getResult());
             Player_2.setBest_result(getResult());
@@ -258,7 +276,7 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
             next_value.setText("");
 
         } else if (c == 3) {
-            Player_3.getUser_score(getResult());
+            Player_3.setUser_score(getResult());
             Player_3.setPrevious_result(getResult());
             Player_3.insert_data(getResult());
             Player_3.setBest_result(getResult());
@@ -267,7 +285,7 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
             next_value.setText("");
 
         } else if (c == 4) {
-            Player_4.getUser_score(getResult());
+            Player_4.setUser_score(getResult());
             Player_4.setPrevious_result(getResult());
             Player_4.insert_data(getResult());
             Player_4.setBest_result(getResult());

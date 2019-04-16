@@ -42,7 +42,7 @@ public class Player {
         this.player_name = player_name;
     }
 
-    public void getUser_score(int current_score) {
+    public void setUser_score(int current_score) {
         this.score += current_score;
     }
 
