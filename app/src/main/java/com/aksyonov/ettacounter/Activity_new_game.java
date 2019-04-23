@@ -1,10 +1,14 @@
 package com.aksyonov.ettacounter;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -133,18 +137,28 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
        tx_prev_result_user1.setTypeface(null, Typeface.BOLD);
 
 
+// enter result from button android enter
+        next_value.setOnKeyListener(new View.OnKeyListener()
+        {
+            public boolean onKey(View v, int keyCode, KeyEvent event)
+            {
+                if (event.getAction() == KeyEvent.ACTION_DOWN)
+                {
+                    switch (keyCode)
+                    {
+                        case KeyEvent.KEYCODE_DPAD_CENTER:
+                        case KeyEvent.KEYCODE_ENTER:
+                            check_edit_result();
+                            return true;
+                        default:
+                            break;
+                    }
+                }
+                return false;
+            }
+        });
     }
 
-/*
-    @Override
-    protected void  onStart() {
-        super.onStart();
-        next_value = (EditText) findViewById(R.id.ed_tx_next_value);
-
-        result = next_value.toString();
-        tx_scores_users_1.setText(result);
-    }
-*/
 
     @Override
     public void onClick(View v) {
@@ -177,7 +191,9 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
                 break;
 
             case R.id.bt_skip:
+                set_scip_result();
                 next_user();
+
 
 
 
@@ -192,12 +208,15 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
      if (next_value.getText().length()==0){
             next_value.setError("Please enter result");
             is_error =1;
+            vibro_error();
             return ;
         }
 
      if (Integer.parseInt((next_value.getText().toString())) >1000){
             next_value.setError("Please enter correct result");
             is_error =1;
+            vibro_error();
+            return ;
         }
      if (is_error !=1)  {
 
@@ -206,6 +225,16 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
 
     }
     }
+
+    private void vibro_error() {
+
+        long mills = 250L;
+        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        if (vibrator.hasVibrator()) {
+            vibrator.vibrate(mills);
+        }
+        }
+
 
 
     private void next_user() {
@@ -291,6 +320,53 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
             Player_4.setBest_result(getResult());
             tx_scores_users_4.setText(Integer.toString(Player_4.getUser_score()));
             tx_prev_result_user4.setText(Integer.toString(Player_4.getPrevious_result()));
+            next_value.setText("");
+        }
+
+    }
+
+    private void set_scip_result() {
+
+        int c = get_Current_user();
+        String scip ="0";
+
+        if (c == 1) {
+
+            Player_1.setUser_score(0);
+            Player_1.setPrevious_result(0);
+            Player_1.insert_data(0);
+            Player_1.setBest_result(0);
+            tx_scores_users_1.setText(Integer.toString(Player_1.getUser_score()));
+            tx_prev_result_user1.setText(scip);
+            next_value.setText("");
+
+        } else if (c == 2) {
+
+
+            Player_2.setUser_score(0);
+            Player_2.setPrevious_result(0);
+            Player_2.insert_data(0);
+            Player_2.setBest_result(0);
+            tx_scores_users_2.setText(Integer.toString(Player_2.getUser_score()));
+            tx_prev_result_user2.setText(scip);
+            next_value.setText("");
+
+        } else if (c == 3) {
+            Player_3.setUser_score(0);
+            Player_3.setPrevious_result(0);
+            Player_3.insert_data(0);
+            Player_3.setBest_result(0);
+            tx_scores_users_3.setText(Integer.toString(Player_3.getUser_score()));
+            tx_prev_result_user3.setText(scip);
+            next_value.setText("");
+
+        } else if (c == 4) {
+            Player_4.setUser_score(0);
+            Player_4.setPrevious_result(0);
+            Player_4.insert_data(0);
+            Player_4.setBest_result(0);
+            tx_scores_users_4.setText(Integer.toString(Player_3.getUser_score()));
+            tx_prev_result_user4.setText(scip);
             next_value.setText("");
         }
 
