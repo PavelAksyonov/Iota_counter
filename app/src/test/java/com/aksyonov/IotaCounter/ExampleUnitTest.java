@@ -1,4 +1,4 @@
-package com.aksyonov.ettacounter;
+package com.aksyonov.IotaCounter;
 
 import org.junit.Test;
 

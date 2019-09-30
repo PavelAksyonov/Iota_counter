@@ -48,9 +48,9 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginStart="80dp"
-            android:layout_marginLeft="80dp"
-            android:layout_marginBottom="265dp"
+            android:layout_marginStart="57dp"
+            android:layout_marginLeft="57dp"
+            android:layout_marginBottom="263dp"
             android:background="@drawable/button_red_background"
             android:text="GAME END"
             android:textColor="@color/colorAccent" />
@@ -70,14 +70,13 @@
 
         <EditText
             android:id="@+id/ed_tx_next_value"
-            android:layout_width="98dp"
+            android:layout_width="147dp"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/tx_pl1"
-            android:layout_marginStart="-33dp"
-            android:layout_marginLeft="-33dp"
+            android:layout_marginStart="23dp"
+            android:layout_marginLeft="23dp"
             android:layout_marginTop="225dp"
-            android:layout_toEndOf="@+id/tx_pl2"
-            android:layout_toRightOf="@+id/tx_pl2"
+            android:hint="Input result here"
             android:inputType="number" />
 
         <TextView
@@ -111,9 +110,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
+            android:layout_marginTop="328dp"
             android:layout_marginStart="23dp"
             android:layout_marginLeft="23dp"
-            android:layout_marginTop="328dp"
             android:inputType="text"
             android:text="@string/Enter_result_for_player" />
 
@@ -142,18 +141,6 @@
             android:layout_marginTop="272dp"
             android:text="Player 4"
             android:visibility="invisible" />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="23dp"
-            android:layout_marginLeft="23dp"
-            android:layout_marginBottom="318dp"
-            android:text="Result" />
 
         <TextView
             android:id="@+id/tx_scores_users_1"
@@ -300,6 +287,7 @@
             android:layout_toEndOf="@+id/tx_Previous_result"
             android:layout_toRightOf="@+id/tx_Previous_result"
             android:text="Scores" />
+
 
     </RelativeLayout>
 

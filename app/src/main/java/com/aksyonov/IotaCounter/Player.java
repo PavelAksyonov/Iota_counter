@@ -1,4 +1,4 @@
-package com.aksyonov.ettacounter;
+package com.aksyonov.IotaCounter;
 
 import java.util.ArrayList;
 
@@ -7,7 +7,7 @@ public class Player {
    public int score =0;
    public int previous_result =0;
    public int best_result =0;
-    public  String player_name;
+   public  String player_name;
 
 
 
@@ -73,5 +73,7 @@ public class Player {
             this.best_result = result;
         }
     }
+
+
 
 }

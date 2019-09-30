@@ -1,4 +1,4 @@
-package com.aksyonov.ettacounter;
+package com.aksyonov.IotaCounter;
 
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -8,25 +8,25 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class Activity_scores extends AppCompatActivity implements View.OnClickListener  {
+public class Activity_current_scores extends AppCompatActivity implements View.OnClickListener  {
 
-    TextView tx_total_scores_pl_1,tx_total_scores_pl_2,tx_total_scores_pl_3,tx_total_scores_pl_4;
-    TextView tx_best_result_pl_1,tx_best_result_pl_2,tx_best_result_pl_3,tx_best_result_pl_4;
+   private TextView tx_total_scores_pl_1,tx_total_scores_pl_2,tx_total_scores_pl_3,tx_total_scores_pl_4;
+   private TextView tx_best_result_pl_1,tx_best_result_pl_2,tx_best_result_pl_3,tx_best_result_pl_4;
 
-    TextView tx_scores_pl3, tx_scores_pl4, tx_scores_3, tx_scores_4, tx_best_result_3,tx_best_result_4,tx_champ_name;
-    TextView tx_scores_pl1, tx_scores_pl2,tx_scores_1,tx_scores_2, tx_best_result_1,tx_best_result_2;
+   private TextView tx_scores_pl3, tx_scores_pl4, tx_scores_3, tx_scores_4, tx_best_result_3,tx_best_result_4,tx_champ_name;
+   private TextView tx_scores_pl1, tx_scores_pl2,tx_scores_1,tx_scores_2, tx_best_result_1,tx_best_result_2;
 
-    int qt_player_new_game = Main.qt_player;
+    int qt_player_new_game = Activity_start.qt_player;
 
 
-    Button bt_scores_main;
+    private Button bt_scores_main, bt_TOP;
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_scores);
+        setContentView(R.layout.activity_current_scores);
 
         tx_total_scores_pl_1 = (TextView) findViewById(R.id.tx_total_scores_pl_1);
         tx_total_scores_pl_2 = (TextView) findViewById(R.id.tx_total_scores_pl_2);
@@ -57,6 +57,9 @@ public class Activity_scores extends AppCompatActivity implements View.OnClickLi
 
         bt_scores_main = (Button)  findViewById(R.id.bt_scores_main);
         bt_scores_main.setOnClickListener(this);
+
+        bt_TOP = (Button)  findViewById(R.id.bt_TOP);
+        bt_TOP.setOnClickListener(this);
 
 
 
@@ -147,8 +150,13 @@ public class Activity_scores extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_scores_main:
-                Intent intent6 = new Intent(this, Main.class);
+                Intent intent6 = new Intent(this, Activity_start.class);
                 startActivity(intent6);
+                break;
+
+            case R.id.bt_TOP:
+                Intent intent7 = new Intent(this, Activity_top_score.class);
+                startActivity(intent7);
                 break;
 
 

@@ -10,5 +10,11 @@
     <string name="settings_menu">iota counter</string>
     <string name="developer">Developed by Pavel Aksyonov (2019)</string>
     <string name="Enter_result_for_player">Enter result for: Player</string>
+    <string name="score_name">score_name</string>
+    <string name="score_result">score_result</string>
+    <string name="score_date">score_date</string>
+    <string name="tv_tops_score_quantity_players">Qty pl</string>
+    <string name="exit">EXIT</string>
+
 
 </resources>

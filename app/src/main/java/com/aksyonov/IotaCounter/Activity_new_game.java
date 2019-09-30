@@ -1,26 +1,31 @@
-package com.aksyonov.ettacounter;
+package com.aksyonov.IotaCounter;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import java.util.ArrayList;
 
-// make bold current move
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 
 public class Activity_new_game extends AppCompatActivity implements View.OnClickListener {
 
-    EditText next_value;
+    EditText edit_result;
 
     Button bt_game_end, bt_ok, bt_skip;
 
@@ -38,7 +43,7 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
 
 
 
-    int qt_player_new_game = Main.qt_player;
+    int qt_player_new_game = Activity_start.qt_player;
     int current_user = 1;
 
     Player Player_1 = new Player("Player_1");
@@ -46,7 +51,7 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
     Player Player_3= new Player("Player_3");
     Player Player_4 = new Player("Player_4");
 
-
+    DataBase dataBase;
 
 
     public int get_Qt_player_new_game() {
@@ -65,17 +70,16 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
 
     public int  getResult() {
 
-        String str = next_value.getText().toString();
+        String str = edit_result.getText().toString().trim();
         String str2 = new String("");
 
-       // if (str.length() ==0){        }
-        if (next_value.getText().length()==0){
-            next_value.setError("Please enter result");
+        if (edit_result.getText().length()==0){
+            edit_result.setError("Please enter result");
         }
         if (str.equals(str2)) {
             return 0;
         } else
-            return Integer.parseInt((next_value.getText().toString()));
+            return Integer.parseInt((edit_result.getText().toString()));
     }
 
 
@@ -102,16 +106,18 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
         tx_prev_result_user3 = (TextView) findViewById(R.id.tx_prev_result_user3);
         tx_prev_result_user4 = (TextView) findViewById(R.id.tx_prev_result_user4);
 
-        next_value = (EditText) findViewById(R.id.ed_tx_next_value);
+        edit_result = (EditText) findViewById(R.id.ed_tx_next_value);
         bt_ok = (Button) findViewById(R.id.bt_ok);
         bt_skip = (Button) findViewById(R.id.bt_skip);
+
+
         bt_game_end = (Button) findViewById(R.id.bt_game_end);
 
         tx_current_player = (TextView) findViewById(R.id.tx_current_player);
 
         bt_ok.setOnClickListener(this);
         bt_skip.setOnClickListener(this);
-        next_value.setOnClickListener(this);
+        edit_result.setOnClickListener(this);
         bt_game_end.setOnClickListener(this);
 
 
@@ -138,7 +144,7 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
 
 
 // enter result from button android enter
-        next_value.setOnKeyListener(new View.OnKeyListener()
+        edit_result.setOnKeyListener(new View.OnKeyListener()
         {
             public boolean onKey(View v, int keyCode, KeyEvent event)
             {
@@ -157,15 +163,51 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
                 return false;
             }
         });
+
+
+        dataBase = new DataBase(this);
+
+
     }
 
 
     @Override
     public void onClick(View v) {
+
+        SQLiteDatabase database = dataBase.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+
+
         switch (v.getId()) {
             case R.id.bt_game_end:
+
                 set_champion();
-                Intent intent5 = new Intent(this, Activity_scores.class);
+
+                //insert data
+
+                if (get_champion_result() > 0) {
+
+                database.beginTransaction();
+
+                try {
+                    contentValues.put(ScoresTable.ScoresEntry.KEY_PLAYER_NAME, get_champion_name());
+                    contentValues.put(ScoresTable.ScoresEntry.KEY_RESULT, get_champion_result());
+                    contentValues.put(ScoresTable.ScoresEntry.KEY_QUANTITY_PLAYERS, get_Qt_player_new_game());
+                    contentValues.put(ScoresTable.ScoresEntry.KEY_DATE, get_current_date());
+
+                    database.insert(DataBase.TABLE_SCORES, null, contentValues);
+
+                    database.setTransactionSuccessful();
+                } finally {
+                    database.endTransaction();
+                }
+                }
+
+
+
+                Intent intent5 = new Intent(this, Activity_current_scores.class);
+
                 intent5.putExtra("Champion name", get_champion_name());
                 intent5.putExtra("champion_number", Integer.toString(get_champion_number()));
 
@@ -180,9 +222,9 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
                 intent5.putExtra("Pl_4_best_result", Integer.toString(Player_4.getBest_result()));
 
 
-
                 startActivity(intent5);
                 break;
+
 
 
             case R.id.bt_ok:
@@ -194,26 +236,28 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
                 set_scip_result();
                 next_user();
 
-
+                //database.delete(DataBase.TABLE_SCORES, null, null);
 
 
                 break;
         }
+
+        dataBase.close();
     }
 
     private void check_edit_result() {
 
     int is_error =0;
 
-     if (next_value.getText().length()==0){
-            next_value.setError("Please enter result");
-            is_error =1;
+     if (edit_result.getText().length()==0){
+            edit_result.setError("Please enter result");
+         is_error =1;
             vibro_error();
             return ;
         }
 
-     if (Integer.parseInt((next_value.getText().toString())) >1000){
-            next_value.setError("Please enter correct result");
+     if (Integer.parseInt((edit_result.getText().toString())) >1000){
+            edit_result.setError("Please enter correct result");
             is_error =1;
             vibro_error();
             return ;
@@ -291,7 +335,7 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
             Player_1.setBest_result(getResult());
             tx_scores_users_1.setText(Integer.toString(Player_1.getUser_score()));
             tx_prev_result_user1.setText(Integer.toString(Player_1.getPrevious_result()));
-            next_value.setText("");
+            edit_result.setText("");
 
         } else if (c == 2) {
 
@@ -302,7 +346,7 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
             Player_2.setBest_result(getResult());
             tx_scores_users_2.setText(Integer.toString(Player_2.getUser_score()));
             tx_prev_result_user2.setText(Integer.toString(Player_2.getPrevious_result()));
-            next_value.setText("");
+            edit_result.setText("");
 
         } else if (c == 3) {
             Player_3.setUser_score(getResult());
@@ -311,7 +355,7 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
             Player_3.setBest_result(getResult());
             tx_scores_users_3.setText(Integer.toString(Player_3.getUser_score()));
             tx_prev_result_user3.setText(Integer.toString(Player_3.getPrevious_result()));
-            next_value.setText("");
+            edit_result.setText("");
 
         } else if (c == 4) {
             Player_4.setUser_score(getResult());
@@ -320,7 +364,7 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
             Player_4.setBest_result(getResult());
             tx_scores_users_4.setText(Integer.toString(Player_4.getUser_score()));
             tx_prev_result_user4.setText(Integer.toString(Player_4.getPrevious_result()));
-            next_value.setText("");
+            edit_result.setText("");
         }
 
     }
@@ -338,7 +382,7 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
             Player_1.setBest_result(0);
             tx_scores_users_1.setText(Integer.toString(Player_1.getUser_score()));
             tx_prev_result_user1.setText(scip);
-            next_value.setText("");
+            edit_result.setText("");
 
         } else if (c == 2) {
 
@@ -349,7 +393,7 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
             Player_2.setBest_result(0);
             tx_scores_users_2.setText(Integer.toString(Player_2.getUser_score()));
             tx_prev_result_user2.setText(scip);
-            next_value.setText("");
+            edit_result.setText("");
 
         } else if (c == 3) {
             Player_3.setUser_score(0);
@@ -358,7 +402,7 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
             Player_3.setBest_result(0);
             tx_scores_users_3.setText(Integer.toString(Player_3.getUser_score()));
             tx_prev_result_user3.setText(scip);
-            next_value.setText("");
+            edit_result.setText("");
 
         } else if (c == 4) {
             Player_4.setUser_score(0);
@@ -367,7 +411,7 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
             Player_4.setBest_result(0);
             tx_scores_users_4.setText(Integer.toString(Player_3.getUser_score()));
             tx_prev_result_user4.setText(scip);
-            next_value.setText("");
+            edit_result.setText("");
         }
 
     }
@@ -499,6 +543,23 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
         return "Unknown";
     }
 
+    private int get_champion_result(){
+        if (Player_1.getIs_champion() == 1) {
+            return Player_1.getUser_score();
+        }
+
+        if (Player_2.getIs_champion() == 1) {
+            return Player_2.getUser_score();
+        }
+        if (Player_3.getIs_champion() == 1) {
+            return Player_3.getUser_score();
+        }
+        if (Player_4.getIs_champion() == 1) {
+            return Player_4.getUser_score();
+        }
+        return 0;
+    }
+
     private int get_champion_number(){
         if (Player_1.getIs_champion() == 1) {
             return 1;
@@ -514,6 +575,13 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
             return 4;
         }
         return 0;
+    }
+
+    public String get_current_date (){
+        Date currentDate = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+         String currentDateText = dateFormat.format(currentDate);
+        return currentDateText;
     }
 }
 

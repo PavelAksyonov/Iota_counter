@@ -15,8 +15,8 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="69dp"
-        android:layout_marginLeft="69dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginLeft="60dp"
         android:layout_marginTop="412dp"
         android:background="@drawable/button_red_background"
         android:text="@string/new_games"
@@ -29,77 +29,62 @@
         android:layout_width="103dp"
         android:layout_height="44dp"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="40dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="413dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="412dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginRight="60dp"
         android:layout_marginBottom="100dp"
-        android:layout_toEndOf="@+id/bt_new_game"
-        android:layout_toRightOf="@+id/bt_new_game"
         android:background="@drawable/button_green_background"
         android:text="@string/scores"
         android:textColor="@color/colorAccent"
         android:textSize="16dp"
         android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/tx_qp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/bt_qp_3"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginStart="136dp"
-        android:layout_marginLeft="136dp"
-        android:layout_marginBottom="-35dp"
-        android:text="@string/quantity_players"
-        android:visibility="invisible" />
 
     <Button
         android:id="@+id/bt_qp_2"
         android:layout_width="51dp"
         android:layout_height="38dp"
         android:layout_below="@+id/bt_new_game"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginStart="69dp"
-        android:layout_marginLeft="69dp"
-        android:layout_marginTop="59dp"
-        android:text="2"
-        android:textColor="@color/colorAccent"
+        android:layout_marginStart="60dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="37dp"
+        android:layout_marginEnd="60dp"
         android:background="@drawable/button_blue_background"
-        android:visibility="invisible" />
+        android:text="2"
+        android:visibility="invisible"
+        android:textColor="@color/colorAccent" />
+
 
     <Button
         android:id="@+id/bt_qp_3"
         android:layout_width="51dp"
         android:layout_height="38dp"
         android:layout_below="@+id/bt_new_game"
-        android:layout_marginStart="41dp"
-        android:layout_marginLeft="41dp"
-        android:layout_marginTop="59dp"
-        android:layout_toEndOf="@+id/bt_qp_2"
-        android:layout_toRightOf="@+id/bt_qp_2"
-        android:text="3"
-        android:textColor="@color/colorAccent"
-        android:visibility="invisible"
+        android:layout_marginTop="37dp"
+        android:layout_centerHorizontal="true"
         android:background="@drawable/button_blue_background"
-
-        />
+        android:text="3"
+        android:visibility="invisible"
+        android:textColor="@color/colorAccent" />
 
     <Button
         android:id="@+id/bt_qp_4"
         android:layout_width="51dp"
         android:layout_height="38dp"
         android:layout_below="@+id/bt_new_game"
-        android:layout_marginStart="41dp"
-        android:layout_marginLeft="41dp"
-        android:layout_marginTop="59dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginLeft="44dp"
+        android:layout_marginTop="37dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginRight="60dp"
         android:layout_toEndOf="@+id/bt_qp_3"
         android:layout_toRightOf="@+id/bt_qp_3"
         android:background="@drawable/button_blue_background"
         android:text="4"
-        android:textColor="@color/colorAccent"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:textColor="@color/colorAccent" />
 
     <ImageView
         android:id="@+id/main_logo"
