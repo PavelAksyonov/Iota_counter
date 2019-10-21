@@ -18,6 +18,8 @@ public class Activity_top_score extends AppCompatActivity  implements View.OnCli
 
     private Button bt_top_score_to_main;
 
+    public SharedPref sharedPref;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +37,7 @@ public class Activity_top_score extends AppCompatActivity  implements View.OnCli
         bt_top_score_to_main = (Button)  findViewById(R.id.bt_top_score_to_main);
         bt_top_score_to_main.setOnClickListener(this);
 
-
+        //sharedPref.LoadGame();
 
     }
 

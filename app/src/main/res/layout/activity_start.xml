@@ -17,7 +17,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="60dp"
         android:layout_marginLeft="60dp"
-        android:layout_marginTop="412dp"
+        android:layout_marginTop="402dp"
         android:background="@drawable/button_red_background"
         android:text="@string/new_games"
         android:textColor="@color/colorAccent"
@@ -31,7 +31,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="412dp"
+        android:layout_marginTop="402dp"
         android:layout_marginEnd="60dp"
         android:layout_marginRight="60dp"
         android:layout_marginBottom="100dp"
@@ -93,7 +93,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="31dp"
-        android:layout_marginTop="106dp"
+        android:layout_marginTop="95dp"
         app:srcCompat="@drawable/main_logo_v2" />
 
 </RelativeLayout>

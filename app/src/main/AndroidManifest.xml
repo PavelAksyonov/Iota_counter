@@ -18,11 +18,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.aksyonov.IotaCounter.Activity_current_scores" />
+        <activity android:name="com.aksyonov.IotaCounter.Activity_current_scores"
+            android:screenOrientation="portrait"/>
         <activity
             android:name="com.aksyonov.IotaCounter.Activity_new_game"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name="com.aksyonov.IotaCounter.Activity_top_score">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.aksyonov.IotaCounter.Activity_top_score"
+            android:screenOrientation="portrait">
 
         </activity>
     </application>

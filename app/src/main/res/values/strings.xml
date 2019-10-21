@@ -15,6 +15,12 @@
     <string name="score_date">score_date</string>
     <string name="tv_tops_score_quantity_players">Qty pl</string>
     <string name="exit">EXIT</string>
+    <string name="game_over">GAME OVER</string>
+    <string name="input_result">Input result here</string>
+    <string name="player_1">Player 1</string>
+    <string name="player_2">Player 2</string>
+    <string name="player_3">Player 3</string>
+    <string name="player_4">Player 4</string>
 
 
 </resources>

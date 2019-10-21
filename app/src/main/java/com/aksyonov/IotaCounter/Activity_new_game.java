@@ -3,6 +3,7 @@ package com.aksyonov.IotaCounter;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -39,7 +41,8 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
              tx_pl_3,
              tx_pl_4,
              tx_scores_users_1, tx_scores_users_2,tx_current_player,
-             tx_scores_users_3, tx_scores_users_4;
+             tx_scores_users_3, tx_scores_users_4,
+            tv_test;
 
 
 
@@ -51,7 +54,27 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
     Player Player_3= new Player("Player_3");
     Player Player_4 = new Player("Player_4");
 
-    DataBase dataBase;
+    public DataBase dataBase;
+
+    public SharedPreferences SharedPF;
+    public String qt_players;//, current_user, user_1_scores, user_2_scores, user_3_scores,user_4_scores;
+
+
+
+    public   void SaveGame(int qty) {
+        SharedPreferences.Editor sg = getSharedPreferences("SAVE GAME", MODE_PRIVATE).edit();
+        sg.putInt(qt_players,qty);
+        sg.commit();
+
+    }
+
+    public  void LoadGame() {
+        SharedPreferences prefs = getSharedPreferences("SAVE GAME", MODE_PRIVATE);
+        int qt =prefs.getInt(qt_players,0);
+        tv_test.setText(Integer.toString(qt));
+
+    }
+
 
 
     public int get_Qt_player_new_game() {
@@ -100,6 +123,8 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
         tx_pl_2 = (TextView) findViewById(R.id.tx_pl2);
         tx_pl_3 = (TextView) findViewById(R.id.tx_pl3);
         tx_pl_4 = (TextView) findViewById(R.id.tx_pl4);
+
+        tv_test = (TextView) findViewById(R.id.tv_test);
 
         tx_prev_result_user1 = (TextView) findViewById(R.id.tx_prev_result_user1);
         tx_prev_result_user2 = (TextView) findViewById(R.id.tx_prev_result_user2);
@@ -184,6 +209,8 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
 
                 set_champion();
 
+
+
                 //insert data
 
                 if (get_champion_result() > 0) {
@@ -229,12 +256,15 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
 
             case R.id.bt_ok:
                 check_edit_result();
+                SaveGame(get_Qt_player_new_game());
+
 
                 break;
 
             case R.id.bt_skip:
                 set_scip_result();
                 next_user();
+                LoadGame();
 
                 //database.delete(DataBase.TABLE_SCORES, null, null);
 

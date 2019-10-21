@@ -1,6 +1,7 @@
 package com.aksyonov.IotaCounter;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,7 +14,7 @@ public class Activity_start extends AppCompatActivity implements View.OnClickLis
 
    public static int qt_player =2;
 
-
+    SharedPref sharedPref;
 
 
 
@@ -40,7 +41,7 @@ public class Activity_start extends AppCompatActivity implements View.OnClickLis
         final TextView tx_round_user1 = (TextView) findViewById(R.id.tx_prev_result_user1);
         final TextView tx_round_user2 = (TextView) findViewById(R.id.tx_prev_result_user2);
 
-
+      //  sharedPref.LoadGame();
 
         bt_best_scores.setOnClickListener(this);
 
