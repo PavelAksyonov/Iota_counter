@@ -4,15 +4,11 @@ import java.util.ArrayList;
 
 public class Player {
 
-   public int score =0;
-   public int previous_result =0;
-   public int best_result =0;
-   public  String player_name;
-
-
-
-
-   public int is_champion =0;
+   private int score =0;
+   private int previous_result =0;
+   private int best_result =0;
+   private   String player_name;
+   private int is_champion =0;
 
 
 
@@ -72,6 +68,19 @@ public class Player {
         {
             this.best_result = result;
         }
+    }
+
+    public void setBest_result_loading(int result) {
+            this.best_result = result;
+
+    }
+
+    public void setPrevious_result_loading(int previous_result) {
+        this.previous_result = previous_result;
+    }
+
+    public void setUser_score_loading(int current_score) {
+        this.score = current_score;
     }
 
 

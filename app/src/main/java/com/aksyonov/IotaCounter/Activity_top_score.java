@@ -18,7 +18,7 @@ public class Activity_top_score extends AppCompatActivity  implements View.OnCli
 
     private Button bt_top_score_to_main;
 
-    public SharedPref sharedPref;
+
 
 
     @Override

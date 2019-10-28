@@ -298,7 +298,6 @@
             android:layout_marginTop="91dp"
             android:layout_toEndOf="@+id/tx_Previous_result"
             android:layout_toRightOf="@+id/tx_Previous_result"
-            android:visibility="invisible"
 
             android:text="TEST" />
 

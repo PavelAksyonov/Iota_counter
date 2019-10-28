@@ -4,20 +4,17 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -27,58 +24,174 @@ import java.util.Locale;
 
 public class Activity_new_game extends AppCompatActivity implements View.OnClickListener {
 
-    EditText edit_result;
+    private  EditText edit_result;
 
-    Button bt_game_end, bt_ok, bt_skip;
+    private Button bt_game_end, bt_ok, bt_skip;
 
 
-    TextView tx_prev_result_user1,
-             tx_prev_result_user2,
-             tx_prev_result_user3,
-             tx_prev_result_user4,
-             tx_pl_1,
-             tx_pl_2,
-             tx_pl_3,
-             tx_pl_4,
-             tx_scores_users_1, tx_scores_users_2,tx_current_player,
-             tx_scores_users_3, tx_scores_users_4,
-            tv_test;
+    private TextView
+             tx_prev_result_user1, tx_prev_result_user2, tx_prev_result_user3, tx_prev_result_user4,
+             tx_pl_1, tx_pl_2, tx_pl_3, tx_pl_4,
+             tx_scores_users_1, tx_scores_users_2,tx_scores_users_3, tx_scores_users_4,
+             tx_current_player;
 
 
 
-    int qt_player_new_game = Activity_start.qt_player;
-    int current_user = 1;
+
+    private int qt_player_in_new_game;
+    private int current_user = 1;
+
+
+    private boolean game_over = false;
 
     Player Player_1 = new Player("Player_1");
     Player Player_2 = new Player("Player_2");
-    Player Player_3= new Player("Player_3");
+    Player Player_3 = new Player("Player_3");
     Player Player_4 = new Player("Player_4");
 
-    public DataBase dataBase;
-
-    public SharedPreferences SharedPF;
-    public String qt_players;//, current_user, user_1_scores, user_2_scores, user_3_scores,user_4_scores;
+    private DataBase dataBase;
 
 
+//shared
+    private String qt_players_pref;
+    private String current_user_pref;
+    private String user_scores_pl_1_pref;
+    private String user_scores_pl_2_pref;
+    private String user_scores_pl_3_pref;
+    private String user_scores_pl_4_pref;
 
-    public   void SaveGame(int qty) {
+    private String user_best_score_pl_1_pref;
+    private String user_best_score_pl_2_pref;
+    private String user_best_score_pl_3_pref;
+    private String user_best_score_pl_4_pref;
+
+    private String user_prev_score_pl_1_pref;
+    private String user_prev_score_pl_2_pref;
+    private String user_prev_score_pl_3_pref;
+    private String user_prev_score_pl_4_pref;
+
+
+
+
+
+    public   void SaveGame() {
+        int qty = getQt_player_in_new_game();
+        int current_user =get_Current_user();
+
         SharedPreferences.Editor sg = getSharedPreferences("SAVE GAME", MODE_PRIVATE).edit();
-        sg.putInt(qt_players,qty);
+      //  sg.putInt(qt_players_pref,qty);
+      //  sg.putInt(current_user_pref,current_user);
+        sg.putBoolean("GAME_IS_OVER",false);
+/*
+        sg.putString(user_scores_pl_1_pref,Integer.toString(Player_1.getUser_score()));
+        sg.putString(user_scores_pl_2_pref,Integer.toString(Player_2.getUser_score()));
+
+        sg.putString(user_best_score_pl_1_pref,Integer.toString(Player_1.getBest_result()));
+        sg.putString(user_best_score_pl_2_pref,Integer.toString(Player_2.getBest_result()));
+
+        sg.putString(user_prev_score_pl_1_pref,Integer.toString(Player_1.getPrevious_result()));
+        sg.putString(user_prev_score_pl_2_pref,Integer.toString(Player_2.getPrevious_result()));
+
+        if(qty ==3){
+            sg.putString(user_scores_pl_3_pref,Integer.toString(Player_3.getUser_score()));
+            sg.putString(user_best_score_pl_3_pref,Integer.toString(Player_3.getBest_result()));
+            sg.putString(user_prev_score_pl_3_pref,Integer.toString(Player_3.getPrevious_result()));
+                   }
+
+        if(qty ==4){
+            sg.putString(user_scores_pl_3_pref,Integer.toString(Player_3.getUser_score()));
+            sg.putString(user_scores_pl_4_pref,Integer.toString(Player_4.getUser_score()));
+            sg.putString(user_best_score_pl_3_pref,Integer.toString(Player_3.getBest_result()));
+            sg.putString(user_best_score_pl_4_pref,Integer.toString(Player_4.getBest_result()));
+            sg.putString(user_prev_score_pl_3_pref,Integer.toString(Player_3.getPrevious_result()));
+            sg.putString(user_prev_score_pl_4_pref,Integer.toString(Player_4.getPrevious_result()));
+        }
+
+        */
         sg.commit();
 
     }
 
     public  void LoadGame() {
         SharedPreferences prefs = getSharedPreferences("SAVE GAME", MODE_PRIVATE);
-        int qt =prefs.getInt(qt_players,0);
-        tv_test.setText(Integer.toString(qt));
+
+        int qty =prefs.getInt(qt_players_pref,2);
+        int current_user =prefs.getInt(current_user_pref,1);
+
+
+        tx_current_player.setText(Integer.toString(current_user));
+        set_bold_current_player(current_user);
+
+
+        Player_1.setUser_score_loading(Integer.parseInt(prefs.getString(user_scores_pl_1_pref,"0")));
+        Player_2.setUser_score_loading(Integer.parseInt(prefs.getString(user_scores_pl_2_pref,"0")));
+
+        Player_1.setPrevious_result_loading(Integer.parseInt(prefs.getString(user_prev_score_pl_1_pref,"0")));
+        Player_2.setPrevious_result_loading(Integer.parseInt(prefs.getString(user_prev_score_pl_2_pref,"0")));
+
+        Player_1.setBest_result_loading(Integer.parseInt(prefs.getString(user_best_score_pl_1_pref,"0")));
+        Player_2.setBest_result_loading(Integer.parseInt(prefs.getString(user_best_score_pl_2_pref,"0")));
+
+        set_bold_current_player(current_user);
+        set_Current_user(current_user);
+
+        // refresh view
+        tx_current_player.setText(Integer.toString(current_user));
+
+        tx_scores_users_1.setText(prefs.getString(user_scores_pl_1_pref,"0"));
+        tx_scores_users_2.setText(prefs.getString(user_scores_pl_2_pref,"0"));
+
+        tx_prev_result_user1.setText(prefs.getString(user_prev_score_pl_1_pref,"0"));
+        tx_prev_result_user2.setText(prefs.getString(user_prev_score_pl_2_pref,"0"));
+
+
+
+        if(qty ==3){
+            Player_3.setUser_score_loading(Integer.parseInt(prefs.getString(user_scores_pl_3_pref,"0")));
+            Player_3.setPrevious_result_loading(Integer.parseInt(prefs.getString(user_prev_score_pl_3_pref,"0")));
+            Player_3.setBest_result_loading(Integer.parseInt(prefs.getString(user_best_score_pl_3_pref,"0")));
+
+            tx_scores_users_3.setText(prefs.getString(user_scores_pl_3_pref,"0"));
+            tx_prev_result_user3.setText(prefs.getString(user_prev_score_pl_3_pref,"0"));
+
+            tx_pl_3.setVisibility(View.VISIBLE);
+            tx_scores_users_3.setVisibility(View.VISIBLE);
+            tx_prev_result_user3.setVisibility(View.VISIBLE);
+        }
+
+        if(qty ==4){
+            Player_3.setUser_score_loading(Integer.parseInt(prefs.getString(user_scores_pl_3_pref,"0")));
+            Player_3.setPrevious_result_loading(Integer.parseInt(prefs.getString(user_prev_score_pl_3_pref,"0")));
+            Player_3.setBest_result_loading(Integer.parseInt(prefs.getString(user_best_score_pl_3_pref,"0")));
+
+            Player_4.setUser_score_loading(Integer.parseInt(prefs.getString(user_scores_pl_4_pref,"0")));
+            Player_4.setPrevious_result_loading(Integer.parseInt(prefs.getString(user_prev_score_pl_4_pref,"0")));
+            Player_4.setBest_result_loading(Integer.parseInt(prefs.getString(user_best_score_pl_4_pref,"0")));
+
+            tx_scores_users_3.setText(prefs.getString(user_scores_pl_3_pref,"0"));
+            tx_scores_users_4.setText(prefs.getString(user_scores_pl_4_pref,"0"));
+
+            tx_prev_result_user3.setText(prefs.getString(user_prev_score_pl_3_pref,"0"));
+            tx_prev_result_user4.setText(prefs.getString(user_prev_score_pl_4_pref,"0"));
+
+            tx_pl_3.setVisibility(View.VISIBLE);
+            tx_scores_users_3.setVisibility(View.VISIBLE);
+            tx_prev_result_user3.setVisibility(View.VISIBLE);
+        }
 
     }
 
 
+public void DeleteSavedGame(){
+
+    SharedPreferences sh  = getSharedPreferences("SAVE GAME", Context.MODE_PRIVATE);
+    sh.edit().clear().commit();
+
+}
+
 
     public int get_Qt_player_new_game() {
-        return qt_player_new_game;
+        return qt_player_in_new_game;
     }
 
     public int get_Current_user() {
@@ -105,7 +218,18 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
             return Integer.parseInt((edit_result.getText().toString()));
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
 
+        if(!get_game_over()){
+            SaveGame();
+        }
+
+
+
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,7 +248,6 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
         tx_pl_3 = (TextView) findViewById(R.id.tx_pl3);
         tx_pl_4 = (TextView) findViewById(R.id.tx_pl4);
 
-        tv_test = (TextView) findViewById(R.id.tv_test);
 
         tx_prev_result_user1 = (TextView) findViewById(R.id.tx_prev_result_user1);
         tx_prev_result_user2 = (TextView) findViewById(R.id.tx_prev_result_user2);
@@ -144,24 +267,6 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
         bt_skip.setOnClickListener(this);
         edit_result.setOnClickListener(this);
         bt_game_end.setOnClickListener(this);
-
-
-        if (qt_player_new_game == 3) {
-            tx_pl_3.setVisibility(View.VISIBLE);
-            tx_scores_users_3.setVisibility(View.VISIBLE);
-            tx_prev_result_user3.setVisibility(View.VISIBLE);
-        }
-
-        if (qt_player_new_game == 4) {
-
-            tx_pl_3.setVisibility(View.VISIBLE);
-            tx_scores_users_3.setVisibility(View.VISIBLE);
-            tx_prev_result_user3.setVisibility(View.VISIBLE);
-
-            tx_pl_4.setVisibility(View.VISIBLE);
-            tx_scores_users_4.setVisibility(View.VISIBLE);
-            tx_prev_result_user4.setVisibility(View.VISIBLE);
-        }
 
        tx_pl_1.setTypeface(null, Typeface.BOLD);
        tx_scores_users_1.setTypeface(null, Typeface.BOLD);
@@ -192,7 +297,31 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
 
         dataBase = new DataBase(this);
 
+        Intent intent = getIntent();
+        setQt_player_in_new_game(intent.getExtras().getInt("Qty_pl_in_game", 2));
 
+        boolean cont = intent.getExtras().getBoolean("Continue", false);
+        if (cont) {
+
+            LoadGame();
+        }
+
+        if (getQt_player_in_new_game() == 3) {
+            tx_pl_3.setVisibility(View.VISIBLE);
+            tx_scores_users_3.setVisibility(View.VISIBLE);
+            tx_prev_result_user3.setVisibility(View.VISIBLE);
+        }
+
+        if (getQt_player_in_new_game() == 4) {
+
+            tx_pl_3.setVisibility(View.VISIBLE);
+            tx_scores_users_3.setVisibility(View.VISIBLE);
+            tx_prev_result_user3.setVisibility(View.VISIBLE);
+
+            tx_pl_4.setVisibility(View.VISIBLE);
+            tx_scores_users_4.setVisibility(View.VISIBLE);
+            tx_prev_result_user4.setVisibility(View.VISIBLE);
+        }
     }
 
 
@@ -207,12 +336,12 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
         switch (v.getId()) {
             case R.id.bt_game_end:
 
+             //   set_game_over(true);
                 set_champion();
-
-
+              //  DeleteSavedGame();
+                SaveGame();
 
                 //insert data
-
                 if (get_champion_result() > 0) {
 
                 database.beginTransaction();
@@ -248,7 +377,7 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
                 intent5.putExtra("Pl_3_best_result", Integer.toString(Player_3.getBest_result()));
                 intent5.putExtra("Pl_4_best_result", Integer.toString(Player_4.getBest_result()));
 
-
+                intent5.putExtra("Qty_pl_in_game", Integer.toString(getQt_player_in_new_game()));
                 startActivity(intent5);
                 break;
 
@@ -256,7 +385,6 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
 
             case R.id.bt_ok:
                 check_edit_result();
-                SaveGame(get_Qt_player_new_game());
 
 
                 break;
@@ -264,7 +392,7 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
             case R.id.bt_skip:
                 set_scip_result();
                 next_user();
-                LoadGame();
+
 
                 //database.delete(DataBase.TABLE_SCORES, null, null);
 
@@ -302,10 +430,9 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
 
     private void vibro_error() {
 
-        long mills = 250L;
         Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         if (vibrator.hasVibrator()) {
-            vibrator.vibrate(mills);
+            vibrator.vibrate(250L);
         }
         }
 
@@ -613,6 +740,23 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
          String currentDateText = dateFormat.format(currentDate);
         return currentDateText;
     }
+
+    public int getQt_player_in_new_game() {
+        return qt_player_in_new_game;
+    }
+
+    public void setQt_player_in_new_game(int qt_player_in_new_game) {
+        this.qt_player_in_new_game = qt_player_in_new_game;
+    }
+
+    public boolean get_game_over() {
+        return game_over;
+    }
+
+    public void set_game_over(boolean game_over) {
+        this.game_over = game_over;
+    }
+
 }
 
 

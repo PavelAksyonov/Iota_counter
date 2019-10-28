@@ -16,7 +16,8 @@ public class Activity_current_scores extends AppCompatActivity implements View.O
    private TextView tx_scores_pl3, tx_scores_pl4, tx_scores_3, tx_scores_4, tx_best_result_3,tx_best_result_4,tx_champ_name;
    private TextView tx_scores_pl1, tx_scores_pl2,tx_scores_1,tx_scores_2, tx_best_result_1,tx_best_result_2;
 
-    int qt_player_new_game = Activity_start.qt_player;
+
+   private int qt_player_in_game_scores;
 
 
     private Button bt_scores_main, bt_TOP;
@@ -63,29 +64,6 @@ public class Activity_current_scores extends AppCompatActivity implements View.O
 
 
 
-       if (qt_player_new_game == 3) {
-            tx_scores_3.setVisibility(View.VISIBLE);
-            tx_scores_pl3.setVisibility(View.VISIBLE);
-            tx_best_result_3.setVisibility(View.VISIBLE);
-            tx_best_result_pl_3.setVisibility(View.VISIBLE);
-            tx_total_scores_pl_3.setVisibility(View.VISIBLE);
-        }
-
-        if (qt_player_new_game == 4) {
-
-            tx_scores_3.setVisibility(View.VISIBLE);
-            tx_scores_pl3.setVisibility(View.VISIBLE);
-            tx_best_result_3.setVisibility(View.VISIBLE);
-            tx_best_result_pl_3.setVisibility(View.VISIBLE);
-            tx_total_scores_pl_3.setVisibility(View.VISIBLE);
-
-            tx_scores_4.setVisibility(View.VISIBLE);
-            tx_scores_pl4.setVisibility(View.VISIBLE);
-            tx_best_result_4.setVisibility(View.VISIBLE);
-            tx_best_result_pl_4.setVisibility(View.VISIBLE);
-            tx_total_scores_pl_4.setVisibility(View.VISIBLE);
-        }
-
         Intent intent5 = getIntent();
         String Champion_name = intent5.getStringExtra("Champion name");
         int Champion_number = Integer.parseInt(intent5.getStringExtra("champion_number"));
@@ -99,6 +77,11 @@ public class Activity_current_scores extends AppCompatActivity implements View.O
         String Pl_2_best_result = intent5.getStringExtra("Pl_2_best_result");
         String Pl_3_best_result = intent5.getStringExtra("Pl_3_best_result");
         String Pl_4_best_result = intent5.getStringExtra("Pl_4_best_result");
+
+        String Qty_pl = intent5.getStringExtra("Qty_pl_in_game");
+
+        setQt_player_new_game(Integer.parseInt(Qty_pl));
+
 
 
         tx_champ_name.setText(Champion_name);
@@ -114,6 +97,31 @@ public class Activity_current_scores extends AppCompatActivity implements View.O
         tx_best_result_pl_4.setText(Pl_4_best_result);
 
         set_bold_champion(Champion_number);
+
+
+
+        if (getQt_player_new_game() == 3) {
+            tx_scores_3.setVisibility(View.VISIBLE);
+            tx_scores_pl3.setVisibility(View.VISIBLE);
+            tx_best_result_3.setVisibility(View.VISIBLE);
+            tx_best_result_pl_3.setVisibility(View.VISIBLE);
+            tx_total_scores_pl_3.setVisibility(View.VISIBLE);
+        }
+
+        if (getQt_player_new_game() == 4) {
+
+            tx_scores_3.setVisibility(View.VISIBLE);
+            tx_scores_pl3.setVisibility(View.VISIBLE);
+            tx_best_result_3.setVisibility(View.VISIBLE);
+            tx_best_result_pl_3.setVisibility(View.VISIBLE);
+            tx_total_scores_pl_3.setVisibility(View.VISIBLE);
+
+            tx_scores_4.setVisibility(View.VISIBLE);
+            tx_scores_pl4.setVisibility(View.VISIBLE);
+            tx_best_result_4.setVisibility(View.VISIBLE);
+            tx_best_result_pl_4.setVisibility(View.VISIBLE);
+            tx_total_scores_pl_4.setVisibility(View.VISIBLE);
+        }
     }
 
 
@@ -161,5 +169,13 @@ public class Activity_current_scores extends AppCompatActivity implements View.O
 
 
         }
+    }
+
+    public int getQt_player_new_game() {
+        return qt_player_in_game_scores;
+    }
+
+    public void setQt_player_new_game(int qt_player_new_game) {
+        this.qt_player_in_game_scores = qt_player_new_game;
     }
 }

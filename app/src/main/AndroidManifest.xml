@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.aksyonov.IotaCounter">
 
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.aksyonov.IotaCounter.Activity_start"
+            android:name=".Activity_start"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -18,16 +20,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.aksyonov.IotaCounter.Activity_current_scores"
-            android:screenOrientation="portrait"/>
         <activity
-            android:name="com.aksyonov.IotaCounter.Activity_new_game"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"/>
-        <activity android:name="com.aksyonov.IotaCounter.Activity_top_score"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:name=".Activity_current_scores"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_new_game"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activity_top_score"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".Activity_start_continue"></activity>
     </application>
-    <uses-permission android:name="android.permission.VIBRATE"/>
+
 </manifest>
