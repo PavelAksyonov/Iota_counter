@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -52,62 +53,39 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
     private DataBase dataBase;
 
 
-//shared
-    private String qt_players_pref;
-    private String current_user_pref;
-    private String user_scores_pl_1_pref;
-    private String user_scores_pl_2_pref;
-    private String user_scores_pl_3_pref;
-    private String user_scores_pl_4_pref;
-
-    private String user_best_score_pl_1_pref;
-    private String user_best_score_pl_2_pref;
-    private String user_best_score_pl_3_pref;
-    private String user_best_score_pl_4_pref;
-
-    private String user_prev_score_pl_1_pref;
-    private String user_prev_score_pl_2_pref;
-    private String user_prev_score_pl_3_pref;
-    private String user_prev_score_pl_4_pref;
-
-
-
-
-
     public   void SaveGame() {
         int qty = getQt_player_in_new_game();
         int current_user =get_Current_user();
 
         SharedPreferences.Editor sg = getSharedPreferences("SAVE GAME", MODE_PRIVATE).edit();
-      //  sg.putInt(qt_players_pref,qty);
-      //  sg.putInt(current_user_pref,current_user);
+        sg.putInt("qt_players_pref",qty);
+        sg.putInt("current_user_pref",current_user);
         sg.putBoolean("GAME_IS_OVER",false);
-/*
-        sg.putString(user_scores_pl_1_pref,Integer.toString(Player_1.getUser_score()));
-        sg.putString(user_scores_pl_2_pref,Integer.toString(Player_2.getUser_score()));
 
-        sg.putString(user_best_score_pl_1_pref,Integer.toString(Player_1.getBest_result()));
-        sg.putString(user_best_score_pl_2_pref,Integer.toString(Player_2.getBest_result()));
+        sg.putString("user_scores_pl_1_pref",Integer.toString(Player_1.getUser_score()));
+        sg.putString("user_scores_pl_2_pref",Integer.toString(Player_2.getUser_score()));
 
-        sg.putString(user_prev_score_pl_1_pref,Integer.toString(Player_1.getPrevious_result()));
-        sg.putString(user_prev_score_pl_2_pref,Integer.toString(Player_2.getPrevious_result()));
+        sg.putString("user_best_score_pl_1_pref",Integer.toString(Player_1.getBest_result()));
+        sg.putString("user_best_score_pl_2_pref",Integer.toString(Player_2.getBest_result()));
+        sg.putString("user_prev_score_pl_1_pref",Integer.toString(Player_1.getPrevious_result()));
+        sg.putString("user_prev_score_pl_2_pref",Integer.toString(Player_2.getPrevious_result()));
 
         if(qty ==3){
-            sg.putString(user_scores_pl_3_pref,Integer.toString(Player_3.getUser_score()));
-            sg.putString(user_best_score_pl_3_pref,Integer.toString(Player_3.getBest_result()));
-            sg.putString(user_prev_score_pl_3_pref,Integer.toString(Player_3.getPrevious_result()));
+            sg.putString("user_scores_pl_3_pref",Integer.toString(Player_3.getUser_score()));
+            sg.putString("user_best_score_pl_3_pref",Integer.toString(Player_3.getBest_result()));
+            sg.putString("user_prev_score_pl_3_pref",Integer.toString(Player_3.getPrevious_result()));
                    }
 
         if(qty ==4){
-            sg.putString(user_scores_pl_3_pref,Integer.toString(Player_3.getUser_score()));
-            sg.putString(user_scores_pl_4_pref,Integer.toString(Player_4.getUser_score()));
-            sg.putString(user_best_score_pl_3_pref,Integer.toString(Player_3.getBest_result()));
-            sg.putString(user_best_score_pl_4_pref,Integer.toString(Player_4.getBest_result()));
-            sg.putString(user_prev_score_pl_3_pref,Integer.toString(Player_3.getPrevious_result()));
-            sg.putString(user_prev_score_pl_4_pref,Integer.toString(Player_4.getPrevious_result()));
+            sg.putString("user_scores_pl_3_pref",Integer.toString(Player_3.getUser_score()));
+            sg.putString("user_scores_pl_4_pref",Integer.toString(Player_4.getUser_score()));
+            sg.putString("user_best_score_pl_3_pref",Integer.toString(Player_3.getBest_result()));
+            sg.putString("user_best_score_pl_4_pref",Integer.toString(Player_4.getBest_result()));
+            sg.putString("user_prev_score_pl_3_pref",Integer.toString(Player_3.getPrevious_result()));
+            sg.putString("user_prev_score_pl_4_pref",Integer.toString(Player_4.getPrevious_result()));
         }
 
-        */
+
         sg.commit();
 
     }
@@ -115,22 +93,23 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
     public  void LoadGame() {
         SharedPreferences prefs = getSharedPreferences("SAVE GAME", MODE_PRIVATE);
 
-        int qty =prefs.getInt(qt_players_pref,2);
-        int current_user =prefs.getInt(current_user_pref,1);
+        int qty =prefs.getInt("qt_players_pref",2);
+        int current_user =prefs.getInt("current_user_pref",1);
 
 
         tx_current_player.setText(Integer.toString(current_user));
         set_bold_current_player(current_user);
+        setQt_player_in_new_game(qty);
 
 
-        Player_1.setUser_score_loading(Integer.parseInt(prefs.getString(user_scores_pl_1_pref,"0")));
-        Player_2.setUser_score_loading(Integer.parseInt(prefs.getString(user_scores_pl_2_pref,"0")));
+        Player_1.setUser_score_loading(Integer.parseInt(prefs.getString("user_scores_pl_1_pref","0")));
+        Player_2.setUser_score_loading(Integer.parseInt(prefs.getString("user_scores_pl_2_pref","0")));
 
-        Player_1.setPrevious_result_loading(Integer.parseInt(prefs.getString(user_prev_score_pl_1_pref,"0")));
-        Player_2.setPrevious_result_loading(Integer.parseInt(prefs.getString(user_prev_score_pl_2_pref,"0")));
+        Player_1.setPrevious_result_loading(Integer.parseInt(prefs.getString("user_prev_score_pl_1_pref","0")));
+        Player_2.setPrevious_result_loading(Integer.parseInt(prefs.getString("user_prev_score_pl_2_pref","0")));
 
-        Player_1.setBest_result_loading(Integer.parseInt(prefs.getString(user_best_score_pl_1_pref,"0")));
-        Player_2.setBest_result_loading(Integer.parseInt(prefs.getString(user_best_score_pl_2_pref,"0")));
+        Player_1.setBest_result_loading(Integer.parseInt(prefs.getString("user_best_score_pl_1_pref","0")));
+        Player_2.setBest_result_loading(Integer.parseInt(prefs.getString("user_best_score_pl_2_pref","0")));
 
         set_bold_current_player(current_user);
         set_Current_user(current_user);
@@ -138,21 +117,19 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
         // refresh view
         tx_current_player.setText(Integer.toString(current_user));
 
-        tx_scores_users_1.setText(prefs.getString(user_scores_pl_1_pref,"0"));
-        tx_scores_users_2.setText(prefs.getString(user_scores_pl_2_pref,"0"));
+        tx_scores_users_1.setText(prefs.getString("user_scores_pl_1_pref","0"));
+        tx_scores_users_2.setText(prefs.getString("user_scores_pl_2_pref","0"));
 
-        tx_prev_result_user1.setText(prefs.getString(user_prev_score_pl_1_pref,"0"));
-        tx_prev_result_user2.setText(prefs.getString(user_prev_score_pl_2_pref,"0"));
-
-
+        tx_prev_result_user1.setText(prefs.getString("user_prev_score_pl_1_pref","0"));
+        tx_prev_result_user2.setText(prefs.getString("user_prev_score_pl_2_pref","0"));
 
         if(qty ==3){
-            Player_3.setUser_score_loading(Integer.parseInt(prefs.getString(user_scores_pl_3_pref,"0")));
-            Player_3.setPrevious_result_loading(Integer.parseInt(prefs.getString(user_prev_score_pl_3_pref,"0")));
-            Player_3.setBest_result_loading(Integer.parseInt(prefs.getString(user_best_score_pl_3_pref,"0")));
+            Player_3.setUser_score_loading(Integer.parseInt(prefs.getString("user_scores_pl_3_pref","0")));
+            Player_3.setPrevious_result_loading(Integer.parseInt(prefs.getString("user_prev_score_pl_3_pref","0")));
+            Player_3.setBest_result_loading(Integer.parseInt(prefs.getString("user_best_score_pl_3_pref","0")));
 
-            tx_scores_users_3.setText(prefs.getString(user_scores_pl_3_pref,"0"));
-            tx_prev_result_user3.setText(prefs.getString(user_prev_score_pl_3_pref,"0"));
+            tx_scores_users_3.setText(prefs.getString("user_scores_pl_3_pref","0"));
+            tx_prev_result_user3.setText(prefs.getString("user_prev_score_pl_3_pref","0"));
 
             tx_pl_3.setVisibility(View.VISIBLE);
             tx_scores_users_3.setVisibility(View.VISIBLE);
@@ -160,23 +137,27 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
         }
 
         if(qty ==4){
-            Player_3.setUser_score_loading(Integer.parseInt(prefs.getString(user_scores_pl_3_pref,"0")));
-            Player_3.setPrevious_result_loading(Integer.parseInt(prefs.getString(user_prev_score_pl_3_pref,"0")));
-            Player_3.setBest_result_loading(Integer.parseInt(prefs.getString(user_best_score_pl_3_pref,"0")));
+            Player_3.setUser_score_loading(Integer.parseInt(prefs.getString("user_scores_pl_3_pref","0")));
+            Player_3.setPrevious_result_loading(Integer.parseInt(prefs.getString("user_prev_score_pl_3_pref","0")));
+            Player_3.setBest_result_loading(Integer.parseInt(prefs.getString("user_best_score_pl_3_pref","0")));
 
-            Player_4.setUser_score_loading(Integer.parseInt(prefs.getString(user_scores_pl_4_pref,"0")));
-            Player_4.setPrevious_result_loading(Integer.parseInt(prefs.getString(user_prev_score_pl_4_pref,"0")));
-            Player_4.setBest_result_loading(Integer.parseInt(prefs.getString(user_best_score_pl_4_pref,"0")));
+            Player_4.setUser_score_loading(Integer.parseInt(prefs.getString("user_scores_pl_4_pref","0")));
+            Player_4.setPrevious_result_loading(Integer.parseInt(prefs.getString("user_prev_score_pl_4_pref","0")));
+            Player_4.setBest_result_loading(Integer.parseInt(prefs.getString("user_best_score_pl_4_pref","0")));
 
-            tx_scores_users_3.setText(prefs.getString(user_scores_pl_3_pref,"0"));
-            tx_scores_users_4.setText(prefs.getString(user_scores_pl_4_pref,"0"));
+            tx_scores_users_3.setText(prefs.getString("user_scores_pl_3_pref","0"));
+            tx_scores_users_4.setText(prefs.getString("user_scores_pl_4_pref","0"));
 
-            tx_prev_result_user3.setText(prefs.getString(user_prev_score_pl_3_pref,"0"));
-            tx_prev_result_user4.setText(prefs.getString(user_prev_score_pl_4_pref,"0"));
+            tx_prev_result_user3.setText(prefs.getString("user_prev_score_pl_3_pref","0"));
+            tx_prev_result_user4.setText(prefs.getString("user_prev_score_pl_4_pref","0"));
 
             tx_pl_3.setVisibility(View.VISIBLE);
             tx_scores_users_3.setVisibility(View.VISIBLE);
             tx_prev_result_user3.setVisibility(View.VISIBLE);
+
+            tx_pl_4.setVisibility(View.VISIBLE);
+            tx_scores_users_4.setVisibility(View.VISIBLE);
+            tx_prev_result_user4.setVisibility(View.VISIBLE);
         }
 
     }
@@ -225,10 +206,29 @@ public void DeleteSavedGame(){
         if(!get_game_over()){
             SaveGame();
         }
+    }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
 
+        if(!get_game_over()){
+            SaveGame();
+        }
+    }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if(!get_game_over()) {
+            LoadGame();
+        }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        return;
     }
 
     @Override
@@ -336,10 +336,10 @@ public void DeleteSavedGame(){
         switch (v.getId()) {
             case R.id.bt_game_end:
 
-             //   set_game_over(true);
-                set_champion();
-              //  DeleteSavedGame();
-                SaveGame();
+
+             DeleteSavedGame();
+             set_game_over(true);
+             set_champion();
 
                 //insert data
                 if (get_champion_result() > 0) {
@@ -392,6 +392,7 @@ public void DeleteSavedGame(){
             case R.id.bt_skip:
                 set_scip_result();
                 next_user();
+
 
 
                 //database.delete(DataBase.TABLE_SCORES, null, null);

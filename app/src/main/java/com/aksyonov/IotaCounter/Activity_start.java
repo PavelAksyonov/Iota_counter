@@ -25,8 +25,8 @@ public class Activity_start extends AppCompatActivity implements View.OnClickLis
         boolean  go;
 
             SharedPreferences prefs = getSharedPreferences("SAVE GAME", MODE_PRIVATE);
-            go=prefs.getBoolean(GAME_IS_OVER,true);
-            Log.i("LOG_d", Boolean.toString(go));
+            go=prefs.getBoolean("GAME_IS_OVER",true);
+
             return go;
     }
 
@@ -58,11 +58,10 @@ public class Activity_start extends AppCompatActivity implements View.OnClickLis
 
         // если есть не сохраненная игра, предлагаем продолжить
 
-            if (!CheckisLoadGame()){
-              //   Intent intent5 = new Intent(this, Activity_start_continue.class);
-             //   startActivity(intent5);
-                Log.i("LOG_d", Boolean.toString(CheckisLoadGame()));
-              }
+           if (! CheckisLoadGame() ){
+              Intent intent5 = new Intent(this, Activity_start_continue.class);
+             startActivity(intent5);
+           }
 
 
         bt_new_game.setOnClickListener(new View.OnClickListener() {

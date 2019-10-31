@@ -32,14 +32,10 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginStart="85dp"
-        android:layout_marginLeft="85dp"
         android:layout_marginTop="402dp"
         android:layout_marginEnd="60dp"
         android:layout_marginRight="60dp"
         android:layout_marginBottom="100dp"
-        android:layout_toEndOf="@+id/bt_continue_game_str_cont"
-        android:layout_toRightOf="@+id/bt_continue_game_str_cont"
         android:background="@drawable/button_red_background"
         android:text="@string/new_games"
         android:textColor="@color/colorAccent"
@@ -61,41 +57,37 @@
         android:id="@+id/bt_qp_2_str_cont"
         android:layout_width="51dp"
         android:layout_height="38dp"
-        android:layout_below="@+id/bt_continue_game_str_cont"
-        android:layout_marginStart="60dp"
-        android:layout_marginLeft="60dp"
-        android:layout_marginTop="45dp"
-        android:layout_marginEnd="60dp"
+        android:layout_alignTop="@id/bt_qp_3_str_cont"
+        android:layout_marginRight="37dp"
+        android:layout_toLeftOf="@id/bt_qp_3_str_cont"
         android:background="@drawable/button_blue_background"
         android:text="2"
-        android:textColor="@color/colorAccent"
-        android:layout_alignParentLeft="true" />
+        android:visibility="invisible"
+        android:textColor="@color/colorAccent" />
 
     <Button
         android:id="@+id/bt_qp_3_str_cont"
         android:layout_width="51dp"
         android:layout_height="38dp"
-        android:layout_below="@+id/bt_qp_2_str_cont"
+        android:layout_below="@+id/main_logo"
         android:background="@drawable/button_blue_background"
         android:text="3"
-        android:layout_marginStart="60dp"
-        android:layout_marginLeft="60dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="60dp"
+        android:layout_marginTop="100dp"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"
         android:textColor="@color/colorAccent" />
 
     <Button
         android:id="@+id/bt_qp_4_str_cont"
         android:layout_width="51dp"
         android:layout_height="38dp"
-        android:layout_marginStart="60dp"
-        android:layout_marginLeft="60dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="60dp"
         android:background="@drawable/button_blue_background"
         android:text="4"
-        android:layout_below="@+id/bt_qp_3_str_cont"
-        android:textColor="@color/colorAccent" />
+        android:layout_marginLeft="37dp"
+        android:layout_toRightOf="@id/bt_qp_3_str_cont"
+        android:layout_alignTop="@id/bt_qp_3_str_cont"
+        android:textColor="@color/colorAccent"
+        android:visibility="invisible"/>
 
 
 

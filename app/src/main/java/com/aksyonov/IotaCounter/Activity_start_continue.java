@@ -5,12 +5,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class Activity_start_continue extends AppCompatActivity  implements View.OnClickListener {
 
     private Button bt_qp_2_str_cont, bt_qp_3str_cont, bt_qp_4_str_cont, bt_continue_game_str_cont, bt_new_game_str_cont;
 
     private int qt_player_new_game;
+
+
+
+    @Override
+    public void onBackPressed() {
+        return;
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +39,20 @@ public class Activity_start_continue extends AppCompatActivity  implements View.
 
         bt_continue_game_str_cont.setOnClickListener(this);
         bt_new_game_str_cont.setOnClickListener(this);
+
+        bt_new_game_str_cont.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast toast_ch_qty = Toast.makeText(Activity_start_continue.this, "Choose quantity players", Toast.LENGTH_SHORT);
+                toast_ch_qty.show();
+
+                bt_qp_2_str_cont.setVisibility(View.VISIBLE);
+                bt_qp_3_str_cont.setVisibility(View.VISIBLE);
+                bt_qp_4_str_cont.setVisibility(View.VISIBLE);
+            }
+
+        });
     }
 
     @Override

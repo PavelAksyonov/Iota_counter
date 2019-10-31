@@ -25,6 +25,11 @@ public class Activity_current_scores extends AppCompatActivity implements View.O
 
 
     @Override
+    public void onBackPressed() {
+        return;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_current_scores);
