@@ -50,6 +50,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentBottom="true"
+            android:layout_marginStart="25dp"
             android:layout_marginLeft="25dp"
             android:layout_marginTop="19dp"
             android:layout_marginBottom="250dp"
@@ -64,9 +65,9 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="60dp"
-            android:layout_marginLeft="60dp"
             android:layout_marginTop="129dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginLeft="25dp"
             android:text="@string/player_1" />
 
 
@@ -75,8 +76,8 @@
             android:layout_width="147dp"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/tx_pl1"
-            android:layout_marginStart="23dp"
-            android:layout_marginLeft="25dp"
+            android:layout_marginStart="22dp"
+            android:layout_marginLeft="22dp"
             android:layout_marginTop="225dp"
             android:hint="@string/input_result"
             android:layout_below="@+id/tx_press_result"
@@ -204,12 +205,11 @@
             android:layout_marginStart="42dp"
             android:layout_marginLeft="42dp"
             android:layout_marginTop="29dp"
-            android:layout_marginEnd="-29dp"
+            android:visibility="invisible"
             android:layout_toEndOf="@+id/tx_pl3"
             android:layout_toRightOf="@+id/tx_pl3"
             android:inputType="text"
-            android:text=""
-            android:visibility="invisible" />
+            android:text="" />
 
         <TextView
             android:id="@+id/tx_prev_result_user4"
@@ -272,13 +272,13 @@
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/tx_press_result"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="89dp"
+            android:layout_marginStart="69dp"
             android:layout_marginTop="90dp"
             android:text="Previous result" />
 
         <TextView
             android:id="@+id/textView3"
-            android:layout_width="wrap_content"
+            android:layout_width="57dp"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginStart="32dp"
@@ -289,17 +289,19 @@
             android:text="Scores" />
 
         <TextView
-            android:id="@+id/tv_test"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_timer"
+            android:layout_width="75dp"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="117dp"
-            android:layout_marginLeft="117dp"
-            android:layout_marginTop="91dp"
+            android:layout_marginStart="115dp"
+            android:layout_marginLeft="115dp"
+            android:layout_marginTop="67dp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
             android:layout_toEndOf="@+id/tx_Previous_result"
             android:layout_toRightOf="@+id/tx_Previous_result"
-
-            android:text="TEST" />
+            android:textSize="17dp"
+            android:text="Timer" />
 
 
     </RelativeLayout>

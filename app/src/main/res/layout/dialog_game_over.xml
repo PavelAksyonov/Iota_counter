@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:layout_weight="1"
+
+    >
+
+    <Button
+        android:id="@+id/b_no_dialog"
+        android:layout_width="57dp"
+        android:layout_height="43dp"
+        android:width="57dp"
+        android:height="43dp"
+        android:background="@drawable/button_red_background"
+        android:text="@string/no_dialog"
+        android:textColor="@color/colorAccent"
+
+        />
+
+    <Button
+
+        android:id="@+id/b_yes_dialog"
+        android:layout_width="57dp"
+        android:layout_height="43dp"
+        android:background="@drawable/button_green_background"
+        android:textColor="@color/colorAccent"
+        android:layout_marginLeft="45dp"
+        android:text="@string/yes_dialog"
+        android:layout_marginStart="30dp" />
+
+</LinearLayout>
+

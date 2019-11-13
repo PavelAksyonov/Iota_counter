@@ -2,16 +2,21 @@ package com.aksyonov.IotaCounter;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Vibrator;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,8 +46,9 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
 
     private int qt_player_in_new_game;
     private int current_user = 1;
+    private int timer_seconds = 120;
 
-
+    private boolean timer_running;
     private boolean game_over = false;
 
     Player Player_1 = new Player("Player_1");
@@ -259,6 +265,8 @@ public void DeleteSavedGame(){
         bt_skip = (Button) findViewById(R.id.bt_skip);
 
 
+
+
         bt_game_end = (Button) findViewById(R.id.bt_game_end);
 
         tx_current_player = (TextView) findViewById(R.id.tx_current_player);
@@ -267,6 +275,7 @@ public void DeleteSavedGame(){
         bt_skip.setOnClickListener(this);
         edit_result.setOnClickListener(this);
         bt_game_end.setOnClickListener(this);
+
 
        tx_pl_1.setTypeface(null, Typeface.BOLD);
        tx_scores_users_1.setTypeface(null, Typeface.BOLD);
@@ -322,64 +331,51 @@ public void DeleteSavedGame(){
             tx_scores_users_4.setVisibility(View.VISIBLE);
             tx_prev_result_user4.setVisibility(View.VISIBLE);
         }
+
+        startTimer();
+        runTimer();
     }
+
+
 
 
     @Override
     public void onClick(View v) {
 
-        SQLiteDatabase database = dataBase.getWritableDatabase();
-
-        ContentValues contentValues = new ContentValues();
-
-
         switch (v.getId()) {
             case R.id.bt_game_end:
 
+                LayoutInflater layoutInflater = LayoutInflater.from(this);
+                View dialog_layout = layoutInflater.inflate(R.layout.dialog_game_over, null);
 
-             DeleteSavedGame();
-             set_game_over(true);
-             set_champion();
+                final AlertDialog dialog = new AlertDialog.Builder(Activity_new_game.this).create();
 
-                //insert data
-                if (get_champion_result() > 0) {
+                dialog.setView(dialog_layout);
+                dialog.setMessage("Are you sure?");
+                dialog.setCancelable(true);
 
-                database.beginTransaction();
-
-                try {
-                    contentValues.put(ScoresTable.ScoresEntry.KEY_PLAYER_NAME, get_champion_name());
-                    contentValues.put(ScoresTable.ScoresEntry.KEY_RESULT, get_champion_result());
-                    contentValues.put(ScoresTable.ScoresEntry.KEY_QUANTITY_PLAYERS, get_Qt_player_new_game());
-                    contentValues.put(ScoresTable.ScoresEntry.KEY_DATE, get_current_date());
-
-                    database.insert(DataBase.TABLE_SCORES, null, contentValues);
-
-                    database.setTransactionSuccessful();
-                } finally {
-                    database.endTransaction();
-                }
-                }
+                dialog.setTitle("Game is Over");
+                dialog.show();
 
 
+                Button bt_no_dialog = (Button) dialog_layout.findViewById(R.id.b_no_dialog);
+                Button bt_yes_dialog = (Button) dialog_layout.findViewById(R.id.b_yes_dialog);
 
-                Intent intent5 = new Intent(this, Activity_current_scores.class);
+                bt_no_dialog.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.cancel();
+                    }
+                });
 
-                intent5.putExtra("Champion name", get_champion_name());
-                intent5.putExtra("champion_number", Integer.toString(get_champion_number()));
+                bt_yes_dialog.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Game_End ();
+                    }
+                });
 
-                intent5.putExtra("Pl_1_score", Integer.toString(Player_1.getUser_score()));
-                intent5.putExtra("Pl_2_score", Integer.toString(Player_2.getUser_score()));
-                intent5.putExtra("Pl_3_score", Integer.toString(Player_3.getUser_score()));
-                intent5.putExtra("Pl_4_score", Integer.toString(Player_4.getUser_score()));
-
-                intent5.putExtra("Pl_1_best_result", Integer.toString(Player_1.getBest_result()));
-                intent5.putExtra("Pl_2_best_result", Integer.toString(Player_2.getBest_result()));
-                intent5.putExtra("Pl_3_best_result", Integer.toString(Player_3.getBest_result()));
-                intent5.putExtra("Pl_4_best_result", Integer.toString(Player_4.getBest_result()));
-
-                intent5.putExtra("Qty_pl_in_game", Integer.toString(getQt_player_in_new_game()));
-                startActivity(intent5);
-                break;
+             break;
 
 
 
@@ -387,11 +383,13 @@ public void DeleteSavedGame(){
                 check_edit_result();
 
 
+
                 break;
 
             case R.id.bt_skip:
                 set_scip_result();
                 next_user();
+                resetTimer();
 
 
 
@@ -401,8 +399,9 @@ public void DeleteSavedGame(){
                 break;
         }
 
-        dataBase.close();
     }
+
+
 
     private void check_edit_result() {
 
@@ -425,6 +424,7 @@ public void DeleteSavedGame(){
 
         set_result();
         next_user();
+        resetTimer();
 
     }
     }
@@ -756,6 +756,101 @@ public void DeleteSavedGame(){
 
     public void set_game_over(boolean game_over) {
         this.game_over = game_over;
+    }
+
+    private void Game_End() {
+
+
+
+        DeleteSavedGame();
+        set_game_over(true);
+        set_champion();
+        save_data_DB();
+
+
+
+        Intent intent5 = new Intent(this, Activity_current_scores.class);
+
+        intent5.putExtra("Champion name", get_champion_name());
+        intent5.putExtra("champion_number", Integer.toString(get_champion_number()));
+
+        intent5.putExtra("Pl_1_score", Integer.toString(Player_1.getUser_score()));
+        intent5.putExtra("Pl_2_score", Integer.toString(Player_2.getUser_score()));
+        intent5.putExtra("Pl_3_score", Integer.toString(Player_3.getUser_score()));
+        intent5.putExtra("Pl_4_score", Integer.toString(Player_4.getUser_score()));
+
+        intent5.putExtra("Pl_1_best_result", Integer.toString(Player_1.getBest_result()));
+        intent5.putExtra("Pl_2_best_result", Integer.toString(Player_2.getBest_result()));
+        intent5.putExtra("Pl_3_best_result", Integer.toString(Player_3.getBest_result()));
+        intent5.putExtra("Pl_4_best_result", Integer.toString(Player_4.getBest_result()));
+
+        intent5.putExtra("Qty_pl_in_game", Integer.toString(getQt_player_in_new_game()));
+        startActivity(intent5);
+    }
+
+    private void save_data_DB() {
+        SQLiteDatabase database = dataBase.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        if (get_champion_result() > 0) {
+
+            database.beginTransaction();
+
+            try {
+                contentValues.put(ScoresTable.ScoresEntry.KEY_PLAYER_NAME, get_champion_name());
+                contentValues.put(ScoresTable.ScoresEntry.KEY_RESULT, get_champion_result());
+                contentValues.put(ScoresTable.ScoresEntry.KEY_QUANTITY_PLAYERS, get_Qt_player_new_game());
+                contentValues.put(ScoresTable.ScoresEntry.KEY_DATE, get_current_date());
+
+                database.insert(DataBase.TABLE_SCORES, null, contentValues);
+
+                database.setTransactionSuccessful();
+            } finally {
+                database.endTransaction();
+            }
+        }
+
+        dataBase.close();
+    }
+
+    private void runTimer(){
+        final TextView timeView = (TextView)findViewById(R.id.tv_timer);
+        final Handler handler = new Handler();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                int hours = timer_seconds/3600;
+                int minutes = (timer_seconds%3600)/60;
+                int secs = timer_seconds%60;
+                String time = String.format("%02d:%02d", minutes, secs);
+                timeView.setText(time);
+                if (timer_running && timer_seconds>0) {
+                    timer_seconds--;
+                }
+                handler.postDelayed(this, 1000);
+
+                if (timer_seconds== 0){
+                    TimerOff();
+                }
+            }
+        });
+    }
+
+    private void startTimer() {
+        timer_running = true;
+    }
+
+    private void resetTimer() {
+        timer_seconds = 120;
+        final TextView timeView = (TextView)findViewById(R.id.tv_timer);
+        timeView.setTextColor(Color.BLACK);
+    }
+
+    private void TimerOff() {
+        final TextView timeView = (TextView)findViewById(R.id.tv_timer);
+        timeView.setTextColor(Color.RED);
+        vibro_error();
+
     }
 
 }

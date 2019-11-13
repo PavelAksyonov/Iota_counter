@@ -9,6 +9,7 @@
     <color name="blue">#2954e1</color>
     <color name="red_game_end">#D20407</color>
     <color name="orange">#f4741e</color>
+    <color name="black">#000000</color>
 
 
 </resources>

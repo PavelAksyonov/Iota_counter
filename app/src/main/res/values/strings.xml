@@ -22,6 +22,8 @@
     <string name="player_3">Player 3</string>
     <string name="player_4">Player 4</string>
     <string name="continue_game">Continue</string>
+    <string name="no_dialog">NO!</string>
+    <string name="yes_dialog">YES</string>
 
 
 </resources>
