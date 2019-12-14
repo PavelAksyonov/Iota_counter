@@ -80,6 +80,7 @@
             android:layout_marginLeft="22dp"
             android:layout_marginTop="225dp"
             android:hint="@string/input_result"
+            android:maxLength="4"
             android:layout_below="@+id/tx_press_result"
             android:inputType="number" />
 

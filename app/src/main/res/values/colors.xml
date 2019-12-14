@@ -3,6 +3,7 @@
     <color name="colorPrimary">#d20407</color>
     <color name="colorPrimaryDark">#09cf0c</color>
     <color name="colorAccent">#f5ecef</color>
+    <color name="colorAccent2">#e10850</color>
     <color name="main_color">#d90517</color>
     <color name="color_scores">#0409b1</color>
     <color name="color_scores2">#fff30d</color>
@@ -10,6 +11,7 @@
     <color name="red_game_end">#D20407</color>
     <color name="orange">#f4741e</color>
     <color name="black">#000000</color>
+    <color name="grey">#a49696</color>
 
 
 </resources>

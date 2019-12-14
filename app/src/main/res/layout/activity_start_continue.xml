@@ -89,6 +89,19 @@
         android:textColor="@color/colorAccent"
         android:visibility="invisible"/>
 
+    <ImageButton
+        android:id="@+id/settings"
+        android:layout_width="43dp"
+        android:layout_height="43dp"
+        android:layout_alignEnd="@+id/main_logo"
+        android:layout_alignRight="@id/main_logo"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="33dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        android:background="@drawable/gear"
+        app:srcCompat="@drawable/gear" />
+
 
 
 

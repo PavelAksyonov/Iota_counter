@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 public class Activity_start_continue extends AppCompatActivity  implements View.OnClickListener {
@@ -12,6 +13,7 @@ public class Activity_start_continue extends AppCompatActivity  implements View.
     private Button bt_qp_2_str_cont, bt_qp_3str_cont, bt_qp_4_str_cont, bt_continue_game_str_cont, bt_new_game_str_cont;
 
     private int qt_player_new_game;
+    private ImageButton settings;
 
 
 
@@ -33,9 +35,12 @@ public class Activity_start_continue extends AppCompatActivity  implements View.
         final Button bt_continue_game_str_cont = (Button) findViewById(R.id.bt_continue_game_str_cont);
         final Button bt_new_game_str_cont = (Button) findViewById(R.id.bt_new_game_str_cont);
 
+        final  ImageButton settings = (ImageButton) findViewById(R.id.settings);
+
         bt_qp_2_str_cont.setOnClickListener(this);
         bt_qp_3_str_cont.setOnClickListener(this);
         bt_qp_4_str_cont.setOnClickListener(this);
+        settings.setOnClickListener(this);
 
         bt_continue_game_str_cont.setOnClickListener(this);
         bt_new_game_str_cont.setOnClickListener(this);
@@ -93,6 +98,12 @@ public class Activity_start_continue extends AppCompatActivity  implements View.
                 intent5.putExtra("Continue", true);
                 startActivity(intent5);
                 break;
+
+            case R.id.settings:
+                Intent settings_intent = new Intent(this, Settings.class);
+                startActivity(settings_intent);
+                break;
+
         }
 
 

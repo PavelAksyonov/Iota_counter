@@ -8,27 +8,23 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
+
 
 public class Activity_start extends AppCompatActivity implements View.OnClickListener{
 
    private Button bt_qp_2, bt_qp_3, bt_qp_4;
+   private ImageButton settings;
 
 
    private int qt_player_in_game =2;
-   private String GAME_IS_OVER;
+   public final String GAME_IS_OVER = "GAME_IS_OVER";
+   public final String SAVE_GAME = "SAVE GAME";
 
-    public  boolean CheckisLoadGame() {
-        boolean  go;
 
-            SharedPreferences prefs = getSharedPreferences("SAVE GAME", MODE_PRIVATE);
-            go=prefs.getBoolean("GAME_IS_OVER",true);
-
-            return go;
-    }
 
 
     @Override
@@ -48,17 +44,20 @@ public class Activity_start extends AppCompatActivity implements View.OnClickLis
         final TextView tx_round_user1 = (TextView) findViewById(R.id.tx_prev_result_user1);
         final TextView tx_round_user2 = (TextView) findViewById(R.id.tx_prev_result_user2);
 
+        final  ImageButton settings = (ImageButton) findViewById(R.id.settings);
+
 
         bt_best_scores.setOnClickListener(this);
 
         bt_qp_2.setOnClickListener(this);
         bt_qp_3.setOnClickListener(this);
         bt_qp_4.setOnClickListener(this);
+        settings.setOnClickListener(this);
 
 
         // если есть не сохраненная игра, предлагаем продолжить
 
-           if (! CheckisLoadGame() ){
+           if ( !CheckisLoadGame() ){
               Intent intent5 = new Intent(this, Activity_start_continue.class);
              startActivity(intent5);
            }
@@ -91,6 +90,7 @@ public class Activity_start extends AppCompatActivity implements View.OnClickLis
             case R.id.bt_qp_2:
                 Intent intent2 = new Intent(this, Activity_new_game.class);
                 setQt_player_in_game(2);
+                DeleteSavedGame();
                 intent2.putExtra("Qty_pl_in_game", getQt_player_in_game());
                 startActivity(intent2);
 
@@ -99,6 +99,7 @@ public class Activity_start extends AppCompatActivity implements View.OnClickLis
           case R.id.bt_qp_3:
                 Intent intent3 = new Intent(this, Activity_new_game.class);
                 setQt_player_in_game(3);
+                DeleteSavedGame();
                 intent3.putExtra("Qty_pl_in_game", getQt_player_in_game());
                 startActivity(intent3);
                 break;
@@ -106,9 +107,16 @@ public class Activity_start extends AppCompatActivity implements View.OnClickLis
             case R.id.bt_qp_4:
                 Intent intent4 = new Intent(this, Activity_new_game.class);
                 setQt_player_in_game(4);
+                DeleteSavedGame();
                 intent4.putExtra("Qty_pl_in_game", getQt_player_in_game());
                 startActivity(intent4);
                 break;
+
+            case R.id.settings:
+                Intent settings_intent = new Intent(this, Settings.class);
+                startActivity(settings_intent);
+                break;
+
 
         }
     }
@@ -122,9 +130,14 @@ public class Activity_start extends AppCompatActivity implements View.OnClickLis
     }
 
     public void DeleteSavedGame(){
-
-        SharedPreferences sh  = getSharedPreferences("SAVE GAME", Context.MODE_PRIVATE);
+        SharedPreferences sh  = getSharedPreferences(SAVE_GAME, Context.MODE_PRIVATE);
         sh.edit().clear().commit();
+    }
 
+    public  boolean CheckisLoadGame() {
+        boolean  go;
+        SharedPreferences prefs = getSharedPreferences(SAVE_GAME, MODE_PRIVATE);
+        go=prefs.getBoolean(GAME_IS_OVER,true);
+        return go;
     }
 }

@@ -2,7 +2,6 @@ package com.aksyonov.IotaCounter;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
@@ -14,13 +13,14 @@ import android.os.Vibrator;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -43,12 +43,25 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
 
 
 
+    private final String GAME_IS_OVER = "GAME_IS_OVER";
+    private final String SAVE_GAME = "SAVE GAME";
+    private final String GAME_SETTINGS = "GAME_SETTINGS";
+    private final String TIME_SETTINGS_PREF = "TIME_SETTINGS_PREF";
+    private final  String HIDE_CURRENT_RESULT_MODE = "HIDE_CURRENT_RESULT_MODE";
+    private final  String HARD_TIMER_MODE = "HARD_TIMER_MODE";
 
     private int qt_player_in_new_game;
     private int current_user = 1;
-    private int timer_seconds = 120;
+
+
+    private int timer_seconds_base;
+    public int timer_seconds_current;
+
+    private boolean hard_time = false;
+
 
     private boolean timer_running;
+    private boolean timer_alarm =true;
     private boolean game_over = false;
 
     Player Player_1 = new Player("Player_1");
@@ -63,10 +76,10 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
         int qty = getQt_player_in_new_game();
         int current_user =get_Current_user();
 
-        SharedPreferences.Editor sg = getSharedPreferences("SAVE GAME", MODE_PRIVATE).edit();
+        SharedPreferences.Editor sg = getSharedPreferences(SAVE_GAME, MODE_PRIVATE).edit();
         sg.putInt("qt_players_pref",qty);
         sg.putInt("current_user_pref",current_user);
-        sg.putBoolean("GAME_IS_OVER",false);
+        sg.putBoolean(GAME_IS_OVER,false);
 
         sg.putString("user_scores_pl_1_pref",Integer.toString(Player_1.getUser_score()));
         sg.putString("user_scores_pl_2_pref",Integer.toString(Player_2.getUser_score()));
@@ -97,7 +110,7 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
     }
 
     public  void LoadGame() {
-        SharedPreferences prefs = getSharedPreferences("SAVE GAME", MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences(SAVE_GAME, MODE_PRIVATE);
 
         int qty =prefs.getInt("qt_players_pref",2);
         int current_user =prefs.getInt("current_user_pref",1);
@@ -171,7 +184,7 @@ public class Activity_new_game extends AppCompatActivity implements View.OnClick
 
 public void DeleteSavedGame(){
 
-    SharedPreferences sh  = getSharedPreferences("SAVE GAME", Context.MODE_PRIVATE);
+    SharedPreferences sh  = getSharedPreferences(SAVE_GAME, Context.MODE_PRIVATE);
     sh.edit().clear().commit();
 
 }
@@ -332,10 +345,10 @@ public void DeleteSavedGame(){
             tx_prev_result_user4.setVisibility(View.VISIBLE);
         }
 
+        LoadingSettings();
         startTimer();
         runTimer();
     }
-
 
 
 
@@ -378,24 +391,17 @@ public void DeleteSavedGame(){
              break;
 
 
-
             case R.id.bt_ok:
                 check_edit_result();
-
-
-
                 break;
 
             case R.id.bt_skip:
                 set_scip_result();
                 next_user();
                 resetTimer();
-
-
+                result_notification("0");
 
                 //database.delete(DataBase.TABLE_SCORES, null, null);
-
-
                 break;
         }
 
@@ -410,26 +416,30 @@ public void DeleteSavedGame(){
      if (edit_result.getText().length()==0){
             edit_result.setError("Please enter result");
          is_error =1;
-            vibro_error();
+            vibro_alarm();
             return ;
         }
 
-     if (Integer.parseInt((edit_result.getText().toString())) >1000){
+     if (Integer.parseInt((edit_result.getText().toString())) >=999){
             edit_result.setError("Please enter correct result");
             is_error =1;
-            vibro_error();
+            vibro_alarm();
             return ;
         }
      if (is_error !=1)  {
+//Integer.parseInt("3636")
 
+        result_notification(edit_result.getText().toString());
         set_result();
         next_user();
         resetTimer();
 
+
     }
     }
 
-    private void vibro_error() {
+
+    private void vibro_alarm() {
 
         Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         if (vibrator.hasVibrator()) {
@@ -760,12 +770,11 @@ public void DeleteSavedGame(){
 
     private void Game_End() {
 
-
-
         DeleteSavedGame();
         set_game_over(true);
         set_champion();
         save_data_DB();
+        stoptTimer();
 
 
 
@@ -786,6 +795,14 @@ public void DeleteSavedGame(){
 
         intent5.putExtra("Qty_pl_in_game", Integer.toString(getQt_player_in_new_game()));
         startActivity(intent5);
+    }
+
+    public void setTimer_alarm(boolean timer_alarm) {
+        this.timer_alarm = timer_alarm;
+    }
+
+    public boolean isTimer_alarm() {
+        return timer_alarm;
     }
 
     private void save_data_DB() {
@@ -819,18 +836,23 @@ public void DeleteSavedGame(){
         handler.post(new Runnable() {
             @Override
             public void run() {
-                int hours = timer_seconds/3600;
-                int minutes = (timer_seconds%3600)/60;
-                int secs = timer_seconds%60;
+                int hours = timer_seconds_current /3600;
+                int minutes = (timer_seconds_current %3600)/60;
+                int secs = timer_seconds_current %60;
                 String time = String.format("%02d:%02d", minutes, secs);
                 timeView.setText(time);
-                if (timer_running && timer_seconds>0) {
-                    timer_seconds--;
+                if (timer_running && timer_seconds_current >0) {
+                    timer_seconds_current--;
                 }
                 handler.postDelayed(this, 1000);
 
-                if (timer_seconds== 0){
+                if (timer_seconds_current == 0 && timer_alarm){
                     TimerOff();
+
+                }
+
+                if (!isTimer_alarm()){
+                    return;
                 }
             }
         });
@@ -841,17 +863,132 @@ public void DeleteSavedGame(){
     }
 
     private void resetTimer() {
-        timer_seconds = 120;
+        timer_seconds_current = getTimer_seconds_base();
+        timer_alarm =true;
         final TextView timeView = (TextView)findViewById(R.id.tv_timer);
         timeView.setTextColor(Color.BLACK);
     }
 
+    private void stoptTimer() {
+        timer_running = false;
+    }
+
+
     private void TimerOff() {
         final TextView timeView = (TextView)findViewById(R.id.tv_timer);
         timeView.setTextColor(Color.RED);
-        vibro_error();
+        vibro_alarm();
+        setTimer_alarm(false);
+        if (isHard_time()) {
+            set_scip_result();
+            next_user();
+            resetTimer();
+            result_notification("0");
 
     }
+    }
+
+    public int getTimer_seconds_base() {
+        return timer_seconds_base;
+    }
+
+    public void setTimer_seconds_base(int timer_seconds_base) {
+        this.timer_seconds_base = timer_seconds_base;
+    }
+
+    public boolean isHard_time() {
+        return hard_time;
+    }
+
+    public void setHard_time(boolean hard_time) {
+        this.hard_time = hard_time;
+    }
+
+    public void LoadingSettings() {
+        SharedPreferences shp_settings = getSharedPreferences(GAME_SETTINGS, MODE_PRIVATE);
+
+         switch (shp_settings.getInt(TIME_SETTINGS_PREF,0)) {
+            case 0:
+                setTimer_seconds_base(120);
+                break;
+            case 1:
+                setTimer_seconds_base(180);
+                break;
+            case 2:
+                setTimer_seconds_base(300);
+                break;
+        }
+     //   setTimer_seconds_base(10);
+        setTimer_seconds_current(getTimer_seconds_base());
+
+        //setHideResultMode(shp_settings.getBoolean(HIDE_CURRENT_RESULT_MODE, false));
+       setHardTimeMode(shp_settings.getBoolean(HARD_TIMER_MODE, false));
+
+    }
+
+
+
+
+    public void setTimer_seconds_current(int timer_seconds_current) {
+        this.timer_seconds_current = timer_seconds_current;
+    }
+
+    private void result_notification( String result) {
+        int res = Integer.parseInt(result);
+
+
+        if (res ==0) {
+            Toast rs = Toast.makeText(this, "No way!!", Toast.LENGTH_SHORT);
+            rs.setGravity(Gravity.CENTER, 0, 55);
+            rs.show();
+        }
+
+        if (res <=10 && res !=0) {
+            Toast rs = Toast.makeText(this, "Will be better!", Toast.LENGTH_SHORT);
+            rs.setGravity(Gravity.CENTER, 0, 55);
+            rs.show();
+        }
+
+        if (res >10 && res <20 ) {
+            Toast rs = Toast.makeText(this, "Not bad!", Toast.LENGTH_SHORT);
+            rs.setGravity(Gravity.CENTER, 0, 55);
+            rs.show();
+        }
+
+        if (res >20 && res <49 ) {
+            Toast rs = Toast.makeText(this, "Good!", Toast.LENGTH_SHORT);
+            rs.setGravity(Gravity.CENTER, 0, 55);
+            rs.show();
+        }
+
+        if (res >50 && res <100 ) {
+            Toast rs = Toast.makeText(this, "Excellent!", Toast.LENGTH_SHORT);
+            rs.setGravity(Gravity.CENTER, 0, 55);
+            rs.show();
+        }
+
+        if (res >100) {
+            Toast rs =  Toast.makeText(this, "Amazing!", Toast.LENGTH_SHORT);
+            rs.setGravity(Gravity.CENTER, 0, 55);
+            rs.show();
+        }
+    }
+
+    private void setHideResultMode(boolean aBoolean) {
+        if (aBoolean){
+            tx_scores_users_1.setVisibility(View.INVISIBLE);
+            tx_scores_users_2.setVisibility(View.INVISIBLE);
+            tx_scores_users_3.setVisibility(View.INVISIBLE);
+            tx_scores_users_4.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void setHardTimeMode(boolean aBoolean) {
+
+        if (aBoolean)
+        setHard_time(aBoolean);
+    }
+
 
 }
 

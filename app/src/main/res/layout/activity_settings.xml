@@ -1,43 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+
+
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity_top_score">
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="266dp"
-        android:layout_marginEnd="117dp"
-        android:layout_marginRight="117dp"
-        android:text="coming soon ..."
-        android:textColor="@color/red_game_end"
-        android:textSize="25dp"
-        android:textStyle="bold"
-        tools:layout_editor_absoluteX="120dp"
-        tools:layout_editor_absoluteY="368dp" />
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="607dp"
-        android:text="@string/developer"
-        android:textColor="@color/color_scores"
-        android:textSize="15dp"
-        android:textStyle="bold"
-        android:layout_centerHorizontal="true"
-        tools:layout_editor_absoluteX="120dp"
-        tools:layout_editor_absoluteY="368dp" />
+    tools:context=".Settings"
+    android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -45,23 +16,139 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         app:popupTheme="@style/AppTheme.PopupOverlay"
-        app:title="@string/settings_menu"
+        app:title="@string/toolbar_settings_title"
         app:titleTextColor="@color/colorAccent"
         tools:layout_editor_absoluteX="167dp"
         tools:layout_editor_absoluteY="0dp" />
 
+
+
+
+
+
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginTop="30dp"
+    android:paddingLeft="25dp">
+
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/tv_timer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="224dp"
-        android:text="TOP 10 best scores"
-        android:textColor="@color/red_game_end"
-        android:textSize="25dp"
-        android:textStyle="bold"
-        tools:layout_editor_absoluteX="108dp"
-        tools:layout_editor_absoluteY="324dp" />
+        android:text="@string/timer"
+        android:textColor="@color/black"
+        android:textSize="20dp"
+        android:textStyle="bold"/>
 
-</RelativeLayout>
+        <Spinner
+            android:id="@+id/spinner_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:entries="@array/timer_time"
+            android:layout_gravity="center"
+            />
+
+</LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="25dp">
+
+        <TextView
+            android:id="@+id/tv_Hidden_result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hide current result"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/sw_hide_result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_weight="2"
+            android:checked="false"
+            android:paddingRight="35dp"
+            android:theme="@style/Switch" />
+
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:paddingLeft="25dp">
+
+        <TextView
+            android:id="@+id/tv_Hard_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hard timer mode"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            android:textStyle="bold"/>
+
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/sw_hard_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_weight="2"
+            android:checked="false"
+            android:paddingRight="35dp"
+            android:theme="@style/Switch" />
+
+
+
+
+
+    </LinearLayout>
+
+    <TextView
+
+        android:layout_width="match_parent"
+        android:layout_height="397dp"
+        android:gravity="center"
+        android:text="@string/developer"
+        android:textColor="@color/color_scores"
+        android:textSize="15dp"
+        android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/bt_save_game"
+        android:layout_width="108dp"
+        android:layout_height="38dp"
+        android:layout_gravity="center"
+        android:background="@drawable/button_red_background"
+        android:text="@string/save"
+        android:textColor="@color/colorAccent"
+        android:textStyle="bold"
+        />
+
+</LinearLayout>
+
+
+
+
+
+
+
+
+
+
+
+
